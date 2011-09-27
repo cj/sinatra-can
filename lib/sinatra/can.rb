@@ -16,14 +16,18 @@ module Sinatra
       def authorize!(who, what)
         current_ability.authorize!(who, what, :message => 'Not Authorized')
       end
+
+      def current_ability
+        @current_ability ||= ::Ability.new(current_user)
+      end
+
+      def current_user
+        @current_user ||= instance_eval(&current_user_block) if current_user_block
+      end
     end
 
-    def current_ability
-      @current_ability ||= ::Ability.new(current_user)
-    end
-
-    def current_user
-      @current_user ||= instance_exec(&@current_user_block) if @current_user_block
+    def current_user_block
+      @current_user_block
     end
 
     def user(&block)
