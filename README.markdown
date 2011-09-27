@@ -1,7 +1,7 @@
 Sinatra::Cell
 =============
 
-Sinatra::Can is a lightweight wrapper for CanCan. It's a partial implementation of the one for ActiveController.
+Sinatra::Can is a lightweight wrapper for CanCan. It contains a partial implementation of the ActiveController helpers.
 
 ## Installing
 
@@ -40,7 +40,7 @@ You can pass the current user with a simple block:
 
 ## Checking Abilities
 
-Abilities are helpers, thus, can be used inside blocks:
+The can? method receives an action and an object as parameters and checks if the current user is allowed, as declared on the Ability. This method is a helper that can be used inside blocks:
 
     can? :destroy, @project
     cannot? :edit, @project
