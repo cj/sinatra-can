@@ -1,5 +1,5 @@
-Sinatra::Cell
-=============
+Sinatra::Can
+============
 
 Sinatra::Can is a lightweight wrapper for CanCan. It contains a partial implementation of the ActiveController helpers.
 
