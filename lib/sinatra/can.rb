@@ -12,7 +12,7 @@ module Sinatra
       end
 
       def authorize!(who, what)
-        current_ability.authorize!(who, what, :message => 'not authorized!')
+        current_ability.authorize!(who, what, :message => 'Not Authorized')
       end
     end
 
