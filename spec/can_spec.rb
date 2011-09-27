@@ -44,21 +44,21 @@ describe 'sinatra-can' do
   end
 
   it "should allow management to the admin user" do
-    app.should_receive(:current_ability).and_return(Ability.new(User.new('admin')))
+    app.user { User.new('admin') }
     app.get('/1') { can?(:manage, :all).to_s }
     get '/1'
     last_response.body.should == 'true'
   end
 
   it "shouldn't allow management to the guest" do
-    app.should_receive(:current_ability).and_return(Ability.new(User.new('guest')))
+    app.user { User.new('guest') }
     app.get('/2') { cannot?(:manage, :all).to_s }
     get '/2'
     last_response.body.should == 'true'
   end
 
   it "should act naturally when authorized" do
-    app.should_receive(:current_ability).and_return(Ability.new(User.new('admin')))
+    app.user { User.new('admin') }
     app.error(CanCan::AccessDenied) { 'not authorized' }
     app.get('/3') { authorize!(:manage, :all); 'okay' }
     get '/3'
@@ -66,7 +66,7 @@ describe 'sinatra-can' do
   end
 
   it "should raise errors when not authorized" do
-    app.should_receive(:current_ability).and_return(Ability.new(User.new('guest')))
+    app.user { User.new('guest') }
     app.error(CanCan::AccessDenied) { 'not authorized' }
     app.get('/4') { authorize!(:manage, :all); 'okay' }
     get '/4'
