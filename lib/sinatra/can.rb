@@ -1,4 +1,6 @@
-require 'cancan'
+require 'cancan/ability'
+require 'cancan/exceptions'
+require 'cancan/rule'
 
 module Sinatra
   module Can
