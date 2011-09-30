@@ -15,19 +15,11 @@ To use it in your project, just hit:
 
 ## Abilities
 
-Abilities are defined just like you would in CanCan. Here's the canonical example, which gives permission for admin users to manage and for non-admins to read:
+Abilities are defined using a block just like with Sinatra. Here's the canonical example, which gives permission for admin users to manage and for non-admins to read:
 
-    class Ability
-      include CanCan::Ability
-
-      def initialize(user)
-        user ||= User.new # guest user (not logged in)
-        if user.admin?
-          can :manage, :all
-        else
-          can :read, :all
-        end
-      end
+    ability do |user|
+        can :manage, :all if user.admin?
+        can :read, :all
     end
 
 ## Current User
