@@ -18,8 +18,19 @@ To use it in your project, just hit:
 Abilities are defined using a block just like with Sinatra. Here's the canonical example, which gives permission for admin users to manage and for non-admins to read:
 
     ability do |user|
+      can :manage, :all if user.admin?
+      can :read, :all
+    end
+
+Alternatively, you can use a class named Ability. That's the regular CanCan way:
+
+    class Ability
+      include CanCan::Ability
+
+      def initialize(user)
         can :manage, :all if user.admin?
         can :read, :all
+      end
     end
 
 ## Current User

@@ -55,7 +55,8 @@ module Sinatra
 
       # Returns the current ability
       def current_ability
-        @current_ability ||= Ability.new(current_user)
+        @current_ability ||= LocalAbility.new(current_user) if LocalAbility.include?(CanCan::Ability)
+        @current_ability ||= ::Ability.new(current_user)
       end
 
       # Evaluates the `user do...end` block and returns the current user
@@ -81,7 +82,7 @@ module Sinatra
     set(:can) { |a,b| condition { can? a, b } }
 
     # Contains the Ability object
-    Ability = Class.new
+    LocalAbility = Class.new
 
     # Use this block to create abilities. You can use the same syntax as in CanCan:
     #
@@ -92,8 +93,8 @@ module Sinatra
     #     can :edit, Article
     #   end
     def ability(&block)
-      Ability.send :include, CanCan::Ability
-      Ability.send :define_method, :initialize, &block
+      LocalAbility.send :include, CanCan::Ability
+      LocalAbility.send :define_method, :initialize, &block
     end
 
     def current_user_block
