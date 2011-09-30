@@ -22,6 +22,8 @@ module Sinatra
       # The cannot? methods works just like the can?, except it's the opposite.
       #
       #   cannot? :edit, @project
+      #
+      # Works in views and controllers.
       def cannot?(*args)
         current_ability.cannot?(*args)
       end
@@ -34,7 +36,7 @@ module Sinatra
       #       haml :admin
       #     end
       #
-      # If the user isn't authorized, CanCan will throw an CanCan::AccessDenied exception. In Sinatra is is easy to catch them.
+      # If the user isn't authorized, CanCan will throw an CanCan::AccessDenied exception. In Sinatra it's very easy to catch them.
       #
       #     error CanCan::AccessDenied do
       #       haml :not_authorized
@@ -45,10 +47,10 @@ module Sinatra
 
       # Returns the current ability
       def current_ability
-        @current_ability ||= ::Ability.new(current_user)
+        @current_ability ||= Ability.new(current_user)
       end
 
-      # Returns the current user
+      # Evaluates the `user do...end` block and returns the current user
       def current_user
         @current_user ||= instance_eval(&current_user_block) if current_user_block
       end
@@ -69,6 +71,22 @@ module Sinatra
     #     haml :admin
     #   end
     set(:can) { |a,b| condition { can? a, b } }
+
+    # Contains the Ability object
+    Ability = Class.new
+
+    # Use this block to create abilities. You can use the same syntax as in CanCan:
+    #
+    #   ability do |user|
+    #     can :delete, Article do |article|
+    #       article.creator == user
+    #     end
+    #     can :edit, Article
+    #   end
+    def ability(&block)
+      Ability.send :include, CanCan::Ability
+      Ability.send :define_method, :initialize, &block
+    end
 
     # Returns the current block defining an user
     def current_user_block

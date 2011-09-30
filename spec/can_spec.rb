@@ -25,17 +25,9 @@ describe 'sinatra-can' do
       end
     end
 
-    class Ability
-      include CanCan::Ability
-
-      def initialize(user)
-        user ||= User.new
-        if user.is_admin?
-          can :edit, :all
-        else
-          can :read, :all
-        end
-      end
+    ability do |user|
+      can :edit, :all if user.is_admin?
+      can :read, :all
     end
 
     app.set :dump_errors, true
