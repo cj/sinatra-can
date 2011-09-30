@@ -63,6 +63,13 @@ module Sinatra
       @current_user_block = block
     end
 
+    # Sets a condition that can be used on route blocks.
+    #
+    #   get '/admin', :can => [ :admin, :all ] do
+    #     haml :admin
+    #   end
+    set(:can) { |a,b| condition { can? a, b } }
+
     # Returns the current block defining an user
     def current_user_block
       @current_user_block

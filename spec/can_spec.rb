@@ -86,4 +86,11 @@ describe 'sinatra-can' do
     get '/6'
     last_response.body.should == "false"
   end
+
+  it "should accept conditions" do
+    app.user { User.new('admin') }
+    app.get('/7', :can => [ :create, User ]) { 'ok' }
+    get '/7'
+    last_response.status.should == 404
+  end
 end
