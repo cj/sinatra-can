@@ -45,7 +45,7 @@ And in views too:
 
 ## Authorizing
 
-Authorizing in CanCan very neat. You just need a single line inside your helpers:
+Authorizing in CanCan is very neat. You just need a single line inside your helpers:
 
     def '/admin' do
       authorize! :admin, :all
@@ -57,6 +57,24 @@ If the user isn't authorized, CanCan will throw an CanCan::AccessDenied exceptio
 
     error CanCan::AccessDenied do
       haml :not_authorized
+    end
+
+## Conditions
+
+There is a built-in condition called :can that can be used on your blocks. It returns 404 when the user has no access.
+
+    get '/admin', :can => [ :admin, :all ] do
+      haml :admin
+    end
+
+## Modular Style
+
+To use this gem on Modular Style apps, you just need to register it:
+
+    class MyApp < Sinatra::Base
+      register Sinatra::Can
+
+      ...
     end
 
 ## Future
