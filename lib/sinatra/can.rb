@@ -37,11 +37,14 @@ module Sinatra
       #       haml :admin
       #     end
       #
-      # If the user isn't authorized, CanCan will throw an CanCan::AccessDenied exception. In Sinatra it's very easy to catch them.
+      # If the user isn't authorized, your app will return a RESTful 403 error, but you can also instruct it to redirect to other pages by defining this setting at your Sinatra configuration.
       #
-      #     error CanCan::AccessDenied do
-      #       haml :not_authorized
-      #     end
+      #     set :not_auth, '/login'
+      # 
+      # Or directly in the authorize! command itself:
+      #
+      #     authorize! :admin, :all, :not_auth => '/login'
+      #
       def authorize!(action, subject, options = {})
         current_ability.authorize!(action, subject, options.merge(:message => 'Not Authorized'))
       rescue CanCan::AccessDenied => ex

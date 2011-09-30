@@ -32,7 +32,7 @@ You can pass the current user with a simple block:
 
 ## Checking Abilities
 
-The can? method receives an action and an object as parameters and checks if the current user is allowed, as declared on the Ability. This method is a helper that can be used inside blocks:
+The can? method receives an action and an object as parameters and checks if the current user is allowed, as declared in the Ability. This method is a helper that can be used inside blocks:
 
     can? :destroy, @project
     cannot? :edit, @project
@@ -53,13 +53,17 @@ Authorizing in CanCan is very neat. You just need a single line inside your help
       haml :admin
     end
 
-If the user isn't authorized, your app will return a RESTful 403 error, but you can also instruct it to redirect to other pages:
+If the user isn't authorized, your app will return a RESTful 403 error, but you can also instruct it to redirect to other pages by defining this setting at your Sinatra configuration.
 
-    set :not_auth => '/login'
+    set :not_auth, '/login'
+
+Or directly in the authorize! command itself:
+
+    authorize! :admin, :all, :not_auth => '/login'
 
 ## Conditions
 
-There is a built-in condition called :can that can be used on your blocks. It returns 404 when the user has no access.
+There is a built-in condition called :can that can be used in your blocks. It returns 404 when the user has no access.
 
     get '/admin', :can => [ :admin, :all ] do
       haml :admin
@@ -67,7 +71,7 @@ There is a built-in condition called :can that can be used on your blocks. It re
 
 ## Modular Style
 
-To use this gem on Modular Style apps, you just need to register it:
+To use this gem in Modular Style apps, you just need to register it:
 
     class MyApp < Sinatra::Base
       register Sinatra::Can
