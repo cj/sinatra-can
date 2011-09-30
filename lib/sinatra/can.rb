@@ -5,7 +5,8 @@ require 'cancan/rule'
 module Sinatra
   # Sinatra::Can is a lightweight wrapper for CanCan. It contains a partial implementation of the ActiveController helpers.
   module Can
-    helpers do
+    # Helpers for Sinatra
+    module Helpers
       # The can? method receives an action and an object as parameters and checks if the current user is allowed, as declared on the Ability. This method is a helper that can be used inside blocks:
       #
       #   can? :destroy, @project
@@ -15,8 +16,8 @@ module Sinatra
       #   <% if can? :create, Project %>
       #     <%= link_to "New Project", new_project_path %>
       #   <% end %>
-      def can?(*args)
-        current_ability.can?(*args)
+      def can?(action, subject, options = {})
+        current_ability.can?(action, subject, options)
       end
 
       # The cannot? methods works just like the can?, except it's the opposite.
@@ -24,8 +25,8 @@ module Sinatra
       #   cannot? :edit, @project
       #
       # Works in views and controllers.
-      def cannot?(*args)
-        current_ability.cannot?(*args)
+      def cannot?(action, subject, options = {})
+        current_ability.cannot?(action, subject, options)
       end
 
       # Authorizing in CanCan very neat. You just need a single line inside your helpers:
@@ -41,8 +42,8 @@ module Sinatra
       #     error CanCan::AccessDenied do
       #       haml :not_authorized
       #     end
-      def authorize!(who, what)
-        current_ability.authorize!(who, what, :message => 'Not Authorized')
+      def authorize!(action, subject, options = {})
+        current_ability.authorize!(action, subject, options.merge(:message => 'Not Authorized'))
       end
 
       # Returns the current ability
@@ -88,9 +89,12 @@ module Sinatra
       Ability.send :define_method, :initialize, &block
     end
 
-    # Returns the current block defining an user
     def current_user_block
       @current_user_block
+    end
+
+    def self.registered(app)
+      app.helpers Helpers
     end
   end
 
