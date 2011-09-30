@@ -31,7 +31,7 @@ describe 'sinatra-can' do
       def initialize(user)
         user ||= User.new
         if user.is_admin?
-          can :manage, :all
+          can :edit, :all
         else
           can :read, :all
         end
@@ -45,14 +45,14 @@ describe 'sinatra-can' do
 
   it "should allow management to the admin user" do
     app.user { User.new('admin') }
-    app.get('/1') { can?(:manage, :all).to_s }
+    app.get('/1') { can?(:edit, :all).to_s }
     get '/1'
     last_response.body.should == 'true'
   end
 
   it "shouldn't allow management to the guest" do
     app.user { User.new('guest') }
-    app.get('/2') { cannot?(:manage, :all).to_s }
+    app.get('/2') { cannot?(:edit, :all).to_s }
     get '/2'
     last_response.body.should == 'true'
   end
@@ -60,7 +60,7 @@ describe 'sinatra-can' do
   it "should act naturally when authorized" do
     app.user { User.new('admin') }
     app.error(CanCan::AccessDenied) { 'not authorized' }
-    app.get('/3') { authorize!(:manage, :all); 'okay' }
+    app.get('/3') { authorize!(:edit, :all); 'okay' }
     get '/3'
     last_response.body.should == 'okay'
   end
@@ -68,7 +68,7 @@ describe 'sinatra-can' do
   it "should raise errors when not authorized" do
     app.user { User.new('guest') }
     app.error(CanCan::AccessDenied) { 'not authorized' }
-    app.get('/4') { authorize!(:manage, :all); 'okay' }
+    app.get('/4') { authorize!(:edit, :all); 'okay' }
     get '/4'
     last_response.body.should == 'not authorized'
   end
@@ -78,5 +78,12 @@ describe 'sinatra-can' do
     app.get('/5') { current_user.name }
     get '/5'
     last_response.body.should == "testing"
+  end
+
+  it "shouldn't allow a rule if it's not declared" do
+    app.user { User.new('admin') }
+    app.get('/6') { can?(:destroy, :all).to_s }
+    get '/6'
+    last_response.body.should == "false"
   end
 end
