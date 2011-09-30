@@ -44,6 +44,10 @@ module Sinatra
       #     end
       def authorize!(action, subject, options = {})
         current_ability.authorize!(action, subject, options.merge(:message => 'Not Authorized'))
+      rescue CanCan::AccessDenied => ex
+        error 403 unless options[:not_auth] || settings.respond_to?(:not_auth)
+        redirect options[:not_auth] if options[:not_auth]
+        redirect settings.not_auth if settings.respond_to?(:not_auth)
       end
 
       # Returns the current ability

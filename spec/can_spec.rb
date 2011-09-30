@@ -59,10 +59,9 @@ describe 'sinatra-can' do
 
   it "should raise errors when not authorized" do
     app.user { User.new('guest') }
-    app.error(CanCan::AccessDenied) { 'not authorized' }
     app.get('/4') { authorize!(:edit, :all); 'okay' }
     get '/4'
-    last_response.body.should == 'not authorized'
+    last_response.status.should == 403
   end
 
   it "should respect the 'user' block" do
@@ -84,5 +83,15 @@ describe 'sinatra-can' do
     app.get('/7', :can => [ :create, User ]) { 'ok' }
     get '/7'
     last_response.status.should == 404
+  end
+
+  it "should accept settings.not_auth and redirect when not authorized" do
+    app.user { User.new('guest') }
+    app.set(:not_auth, '/login' )
+    app.get('/login') { 'login here' }
+    app.get('/8') { authorize! :manage, :all }
+    get '/8'
+    follow_redirect!
+    last_response.body.should == 'login here'
   end
 end

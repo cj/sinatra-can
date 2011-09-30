@@ -53,11 +53,9 @@ Authorizing in CanCan is very neat. You just need a single line inside your help
       haml :admin
     end
 
-If the user isn't authorized, CanCan will throw an CanCan::AccessDenied exception. In Sinatra is is easy to catch them.
+If the user isn't authorized, your app will return a RESTful 403 error, but you can also instruct it to redirect to other pages:
 
-    error CanCan::AccessDenied do
-      haml :not_authorized
-    end
+    set :not_auth => '/login'
 
 ## Conditions
 
