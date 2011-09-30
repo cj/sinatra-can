@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "sinatra-can"
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Silvio Henrique Ferreira"]
-  s.date = "2011-09-27"
+  s.date = "2011-09-30"
   s.description = "CanCan wrapper for Sinatra."
   s.email = "shferreira@me.com"
   s.extra_rdoc_files = [
@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
     "README.markdown",
     "Rakefile",
     "lib/sinatra/can.rb",
+    "sinatra-can.gemspec",
     "spec/can_spec.rb"
   ]
   s.homepage = "http://github.com/shf/sinatra-can"
