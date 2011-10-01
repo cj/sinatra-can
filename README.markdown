@@ -1,7 +1,9 @@
 Sinatra::Can
 ============
 
-Sinatra::Can is a lightweight wrapper for CanCan. It contains a partial implementation of the ActiveController helpers.
+Sinatra::Can is a lightweight wrapper for the CanCan authorization library. It contains a partial implementation of CanCan's Rails helpers, but in Sinatra.
+
+Check out CanCan if you don't know it: https://github.com/ryanb/cancan/
 
 ## Installing
 
@@ -9,7 +11,7 @@ To install this gem, just use the gem command:
 
     gem install sinatra-can
 
-To use it in your project, just hit:
+To use it in your project, just require it:
 
     require 'sinatra/can'
 
@@ -22,7 +24,17 @@ Abilities are defined using a block just like with Sinatra. Here's the canonical
       can :read, :all
     end
 
-Alternatively, you can use a class named Ability. That's the regular CanCan way:
+You can use regular CanCan syntax, since our gem is just a wrapper:
+
+    ability do |user|
+      if user.is_admin?
+        can :kick, User do |victim|
+          !victim.is_admin?
+        end
+      end
+    end
+
+Alternatively, you can use a class named Ability, which is useful if you're porting a project from Rails to Sinatra. That's the regular CanCan way:
 
     class Ability
       include CanCan::Ability
@@ -71,6 +83,12 @@ If the user isn't authorized, your app will return a RESTful 403 error, but you 
 Or directly in the authorize! command itself:
 
     authorize! :admin, :all, :not_auth => '/login'
+
+Sinatra lacks controllers, but you can use "before" blocks to restrict groups of routes with wildcards (or even regular expressions). In this case you'll only be able to access the page if your user is authorize to ":manage" some "Customers".
+
+    before '/customers/*' do
+      authorize! :manage, Customers
+    end
 
 ## Conditions
 
