@@ -68,7 +68,7 @@ And in views too:
 
 ## Authorizing
 
-Authorizing in CanCan is very neat. You just need a single line inside your helpers:
+Authorizing in CanCan is very neat. You just need a single line inside your routes:
 
     def '/admin' do
       authorize! :admin, :all
@@ -84,7 +84,7 @@ Or directly in the authorize! command itself:
 
     authorize! :admin, :all, :not_auth => '/login'
 
-Sinatra lacks controllers, but you can use "before" blocks to restrict groups of routes with wildcards (or even regular expressions). In this case you'll only be able to access the page if your user is authorize to ":manage" some "Customers".
+Sinatra lacks controllers, but you can use "before" blocks to restrict groups of routes with wildcards (or even regular expressions). In this case you'll only be able to access the pages under /customers/ if your user is authorized to ":manage" some "Customers".
 
     before '/customers/*' do
       authorize! :manage, Customers
