@@ -108,6 +108,14 @@ To use this gem in Modular Style apps, you just need to register it:
       ...
     end
 
+## Changing Defaults
+
+It's easy to change the default ability class. Our example looks a lot like the CanCan one, but we're doing it inside a before do...end method for flexibility: this way you can even associate different ability classes to different routes.
+
+    before do
+      @current_ability ||= ::MyAbility.new(current_user)
+    end
+
 ## Future
 
 CanCan provides a lot of helpers, so this is just the start. The code is quite simple and any help is welcome!
