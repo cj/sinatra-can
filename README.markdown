@@ -116,9 +116,11 @@ It's easy to change the default ability class. Our example looks a lot like the 
       @current_ability ||= ::MyAbility.new(current_user)
     end
 
-## Examaple App
+## Example App
 
-Here's an example app, using Modualar-style. It should work.
+Here's here's an example app using Modualar-style.
+
+To test, pass your user name via the ?user= query string. `/secret?user=admin` should be accessible, but `/secret?user=someone_else` should be off limits.
 
     require 'rubygems'
     require 'sinatra'
@@ -131,7 +133,6 @@ Here's an example app, using Modualar-style. It should work.
         can :read, :secret if user == "admin"
       end
 
-      # pass the string as the user, just for this example
       user do
         params[:user]
       end
@@ -139,11 +140,6 @@ Here's an example app, using Modualar-style. It should work.
       error 403 do
         'not authorized'
       end
-
-      # Pass your user name via the ?user= query string:
-      #
-      # Accessible:      /secret?user=admin
-      # Not-accessible:  /secret?user=someone_else
 
       get '/secret' do
         authorize! :read, :secret
