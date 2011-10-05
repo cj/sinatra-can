@@ -61,7 +61,7 @@ module Sinatra
 
       # Evaluates the `user do...end` block and returns the current user
       def current_user
-        @current_user ||= instance_eval(&current_user_block) if current_user_block
+        @current_user ||= instance_eval(&self.class.current_user_block) if self.class.current_user_block
       end
     end
 
