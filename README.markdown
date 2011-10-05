@@ -116,6 +116,43 @@ It's easy to change the default ability class. Our example looks a lot like the 
       @current_ability ||= ::MyAbility.new(current_user)
     end
 
+## Examaple App
+
+Here's an example app, using Modualar-style. It should work.
+
+    require 'rubygems'
+    require 'sinatra'
+    require 'sinatra/can'
+
+    class MyApp < Sinatra::Base
+      register Sinatra::Can
+
+      ability do |user|
+        can :read, :secret if user == "admin"
+      end
+
+      # pass the string as the user, just for this example
+      user do
+        params[:user]
+      end
+
+      error 403 do
+        'not authorized'
+      end
+
+      # Pass your user name via the ?user= query string:
+      #
+      # Accessible:      /secret?user=admin
+      # Not-accessible:  /secret?user=someone_else
+
+      get '/secret' do
+        authorize! :read, :secret
+        'you can read it'
+      end
+    end
+
+    use MyApp
+
 ## Future
 
 CanCan provides a lot of helpers, so this is just the start. The code is quite simple and any help is welcome!

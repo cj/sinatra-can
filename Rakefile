@@ -4,9 +4,9 @@ require 'jeweler'
 
 Jeweler::Tasks.new do |gem|
   gem.name = "sinatra-can"
-  gem.version = "0.1.2"
-  gem.summary = "CanCan in Sinatra!"
-  gem.description = "CanCan wrapper for Sinatra."
+  gem.version = "0.1.3"
+  gem.summary = "CanCan wrapper for Sinatra."
+  gem.description = "CanCan (authorization library) wrapper for Sinatra."
   gem.email = "shferreira@me.com"
   gem.homepage = "http://github.com/shf/sinatra-can"
   gem.authors = [ "Silvio Henrique Ferreira" ]
