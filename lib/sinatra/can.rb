@@ -74,13 +74,6 @@ module Sinatra
       @current_user_block = block
     end
 
-    # Sets a condition that can be used on route blocks.
-    #
-    #   get '/admin', :can => [ :admin, :all ] do
-    #     haml :admin
-    #   end
-    set(:can) { |a,b| condition { can? a, b } }
-
     # Contains the Ability object
     LocalAbility = Class.new
 
@@ -102,6 +95,7 @@ module Sinatra
     end
 
     def self.registered(app)
+      app.set(:can) { |a,b| condition { can? a, b } }
       app.helpers Helpers
     end
   end
