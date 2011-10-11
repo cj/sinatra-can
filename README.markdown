@@ -92,7 +92,7 @@ Sinatra lacks controllers, but you can use "before" blocks to restrict groups of
 
 ## Conditions
 
-There is a built-in condition called :can that can be used in your blocks. It returns 404 when the user has no access.
+There is a built-in condition called :can that can be used in your blocks. It returns 403 when the user has no access. It basically replaces the authorize! method.
 
     get '/admin', :can => [ :admin, :all ] do
       haml :admin
