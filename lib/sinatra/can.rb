@@ -95,7 +95,7 @@ module Sinatra
     end
 
     def self.registered(app)
-      app.set(:can) { |a,b| condition { can? a, b } }
+      app.set(:can) { |a,b| condition { authorize! a, b } }
       app.helpers Helpers
     end
   end

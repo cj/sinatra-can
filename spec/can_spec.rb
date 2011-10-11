@@ -78,19 +78,26 @@ describe 'sinatra-can' do
     last_response.body.should == "false"
   end
 
-  it "should accept conditions" do
+  it "should throw 403 errors upon failed conditions" do
     app.user { User.new('admin') }
     app.get('/7', :can => [ :create, User ]) { 'ok' }
     get '/7'
-    last_response.status.should == 404
+    last_response.status.should == 403
+  end
+
+  it "should accept conditions" do
+    app.user { User.new('admin') }
+    app.get('/8', :can => [ :edit, :all ]) { 'ok' }
+    get '/8'
+    last_response.status.should == 200
   end
 
   it "should accept settings.not_auth and redirect when not authorized" do
     app.user { User.new('guest') }
     app.set(:not_auth, '/login' )
     app.get('/login') { 'login here' }
-    app.get('/8') { authorize! :manage, :all }
-    get '/8'
+    app.get('/9') { authorize! :manage, :all }
+    get '/9'
     follow_redirect!
     last_response.body.should == 'login here'
   end
