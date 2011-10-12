@@ -120,10 +120,22 @@ It's easy to change the default ability class. Our example looks a lot like the 
 
 load_and_authorize is one of CanCan's greatest features. It will, if applicable, load a model based on the :id parameter, and authorize, according to the HTTP Request Method.
 
-The usage with this Sinatra adapter is a bit different, since it's implemented from scratch. It is compatible with ActiveRecord, DataMapper and Sequel.
+The usage with this Sinatra adapter is a bit different and way simpler, since it's implemented from scratch. Since Sinatra is based on routes (as opposed to controllers + methods), you need to tell which model you want to use. It will guess the action (:view, :create, etc) using the HTTP verb, and an 'id' parameter to load the model.
+
+It is compatible with ActiveRecord, DataMapper and Sequel.
+
+Here's the syntax:
+
+    get '/projects/:id' do
+      load_and_authorize! Project
+
+      # It's loaded now.
+      @project.name
+    end
+
+It is also implemented as a handy condition:
 
     get '/projects/:id', :model => Project do
-      # it is autoloaded now
       @project.name
     end
 

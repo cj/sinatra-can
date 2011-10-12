@@ -59,8 +59,14 @@ module Sinatra
       # 
       # The usage in Sinatra is a bit different, since it's implemented from scratch. It is compatible with ActiveRecord, DataMapper and Sequel.
       #
+      #     get '/projects/:id' do
+      #       load_and_authorize! Project
+      #       @project.name
+      #     end
+      #
+      # It is also implemented as a handy condition:
+      #
       #     get '/projects/:id', :model => Project do
-      #       # it is autoloaded now
       #       @project.name
       #     end
       #
