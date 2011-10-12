@@ -116,6 +116,35 @@ It's easy to change the default ability class. Our example looks a lot like the 
       @current_ability ||= ::MyAbility.new(current_user)
     end
 
+## Load and Authorize
+
+load_and_authorize is one of CanCan's greatest features. It will, if applicable, load a model based on the :id parameter, and authorize, according to the HTTP Request Method.
+
+The usage with this Sinatra adapter is a bit different, since it's implemented from scratch. It is compatible with ActiveRecord, DataMapper and Sequel.
+
+    get '/projects/:id', :model => Project do
+      # it is autoloaded now
+      @project.name
+    end
+
+Authorization happens right after autoloading, and depends on the HTTP verb. Here's the CanCan actions for each verb:
+
+ - :list (get without an :id)
+ - :view (get)
+ - :create (post)
+ - :update (put)
+ - :delete (delete)
+
+So, for a model called Projects, you can define your Ability like this, for example:
+
+    ability do |user|
+      can :list, Project
+      can :view, Project
+      can :create, Project if user.is_manager?
+      can :update, Project if user.is_admin?
+      can :delete, Project if user.is_admin?
+    end
+
 ## Example App
 
 Here's here's an example app using Modualar-style.

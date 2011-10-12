@@ -1,6 +1,7 @@
 require 'rspec'
 require 'rack/test'
 require 'sinatra'
+require 'dm-core'
 require 'sinatra/can'
 
 describe 'sinatra-can' do
@@ -25,9 +26,20 @@ describe 'sinatra-can' do
       end
     end
 
+    DataMapper.setup(:default, :adapter => 'in_memory')
+
+    class Article
+      include DataMapper::Resource
+
+      property :id, Serial
+      property :title, String
+    end
+
     ability do |user|
       can :edit, :all if user.is_admin?
       can :read, :all
+      can :read, Article
+      cannot :create, Article
     end
 
     app.set :dump_errors, true
@@ -92,13 +104,39 @@ describe 'sinatra-can' do
     last_response.status.should == 200
   end
 
-  it "should accept settings.not_auth and redirect when not authorized" do
+  it "should accept not_auth and redirect when not authorized" do
     app.user { User.new('guest') }
-    app.set(:not_auth, '/login' )
     app.get('/login') { 'login here' }
-    app.get('/9') { authorize! :manage, :all }
+    app.get('/9') { authorize! :manage, :all, :not_auth => '/login'  }
     get '/9'
     follow_redirect!
     last_response.body.should == 'login here'
+  end
+
+  it "should autoload and autorize the model" do
+    article = Article.create(:title => 'test1')
+
+    app.user { User.new('admin') }
+    app.get('/10/:id') { load_and_authorize!(Article); @article.title }
+    get '/10/' + article.id.to_s
+    last_response.body.should == article.title
+  end
+
+  it "should shouldn't allow creation of the model" do
+    article = Article.create(:title => 'test2')
+
+    app.user { User.new('admin') }
+    app.post('/11', :model => ::Article) { }
+    post '/11'
+    last_response.status.should == 403
+  end
+
+  it "should autoload and autorize the model when using the condition" do
+    article = Article.create(:title => 'test3')
+
+    app.user { User.new('admin') }
+    app.get('/12/:id', :model => ::Article) { @article.title }
+    get '/12/' + article.id.to_s
+    last_response.body.should == article.title
   end
 end
