@@ -98,29 +98,11 @@ There is a built-in condition called :can that can be used in your blocks. It re
       haml :admin
     end
 
-## Modular Style
-
-To use this gem in Modular Style apps, you just need to register it:
-
-    class MyApp < Sinatra::Base
-      register Sinatra::Can
-
-      ...
-    end
-
-## Changing Defaults
-
-It's easy to change the default ability class. Our example looks a lot like the CanCan one, but we're doing it inside a before do...end method for flexibility: this way you can even associate different ability classes to different routes.
-
-    before do
-      @current_ability ||= ::MyAbility.new(current_user)
-    end
-
 ## Load and Authorize
 
 load_and_authorize is one of CanCan's greatest features. It will, if applicable, load a model based on the :id parameter, and authorize, according to the HTTP Request Method.
 
-The usage with this Sinatra adapter is a bit different and way simpler, since it's implemented from scratch. Since Sinatra is based on routes (as opposed to controllers + methods), you need to tell which model you want to use. It will guess the action (:view, :create, etc) using the HTTP verb, and an 'id' parameter to load the model.
+The usage with this Sinatra adapter is a bit different and way simpler, and it's implemented from scratch. Since Sinatra is based on routes (as opposed to controllers + methods), you need to tell which model you want to use. It will guess the action (:view, :create, etc) using the HTTP verb, and an 'id' parameter to load the model.
 
 It is compatible with ActiveRecord, DataMapper and Sequel.
 
@@ -133,7 +115,7 @@ Here's the syntax:
       @project.name
     end
 
-It is also implemented as a handy condition:
+There's also a handy condition:
 
     get '/projects/:id', :model => Project do
       @project.name
@@ -155,6 +137,24 @@ So, for a model called Projects, you can define your Ability like this, for exam
       can :create, Project if user.is_manager?
       can :update, Project if user.is_admin?
       can :delete, Project if user.is_admin?
+    end
+
+## Modular Style
+
+To use this gem in Modular Style apps, you just need to register it:
+
+    class MyApp < Sinatra::Base
+      register Sinatra::Can
+
+      ...
+    end
+
+## Changing Defaults
+
+It's easy to change the default ability class. Our example looks a lot like the CanCan one, but we're doing it inside a before do...end method for flexibility: this way you can even associate different ability classes to different routes.
+
+    before do
+      @current_ability ||= ::MyAbility.new(current_user)
     end
 
 ## Example App
