@@ -143,9 +143,16 @@ describe 'sinatra-can' do
     article = Article.create(:title => 'test4')
 
     app.user { User.new('admin') }
-    app.before('/article/:id', :model => Article) { }
-    app.get('/article/:id') { @article.title }
-    get '/article/' + (article.id).to_s
+    app.before('/13/:id', :model => Article) { }
+    app.get('/13/:id') { @article.title }
+    get '/13/' + (article.id).to_s
     last_response.body.should == article.title
+  end
+
+  it "should return a 404 when the autoload fails" do
+    app.user { User.new('admin') }
+    app.get('/article14/:id', :model => Article) { @article.title }
+    get '/article14/999'
+    last_response.status.should == 404
   end
 end

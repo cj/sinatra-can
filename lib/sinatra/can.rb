@@ -80,7 +80,8 @@ module Sinatra
         if params[:id]
           instance ||= model.find_by_id(params[:id]) if model.respond_to? :find_by_id   # ActiveRecord
           instance ||= model.get(params[:id]) if model.respond_to? :get                 # DataMapper
-          instance ||= model[params[:id]] if model.respond_to? :[]                      # Sequel
+          instance ||= model[params[:id]] if model.superclass.to_s == 'Sequel::Model'   # Sequel
+          error 404 unless instance
           instance_name = model.name.gsub(/([a-z\d])([A-Z])/,'\1_\2').downcase
           self.instance_variable_set("@#{instance_name}", instance)
         end
