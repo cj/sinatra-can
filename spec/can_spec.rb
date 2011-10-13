@@ -63,7 +63,6 @@ describe 'sinatra-can' do
 
   it "should act naturally when authorized" do
     app.user { User.new('admin') }
-    app.error(CanCan::AccessDenied) { 'not authorized' }
     app.get('/3') { authorize!(:edit, :all); 'okay' }
     get '/3'
     last_response.body.should == 'okay'

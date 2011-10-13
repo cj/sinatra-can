@@ -1,8 +1,5 @@
 require 'cancan/ability'
-require 'cancan/exceptions'
 require 'cancan/rule'
-
-require 'i18n'
 
 module Sinatra
   # Sinatra::Can is a lightweight wrapper for CanCan. It contains a partial implementation of the ActiveController helpers.
@@ -48,11 +45,11 @@ module Sinatra
       #     authorize! :admin, :all, :not_auth => '/login'
       #
       def authorize!(action, subject, options = {})
-        current_ability.authorize!(action, subject, options.merge(:message => 'Not Authorized'))
-      rescue CanCan::AccessDenied => ex
-        error 403 unless options[:not_auth] || settings.respond_to?(:not_auth)
-        redirect options[:not_auth] if options[:not_auth]
-        redirect settings.not_auth if settings.respond_to?(:not_auth)
+        if current_ability.cannot?(action, subject, options)
+          error 403 unless options[:not_auth] || settings.respond_to?(:not_auth)
+          redirect options[:not_auth] if options[:not_auth]
+          redirect settings.not_auth if settings.respond_to?(:not_auth)
+        end
       end
 
       # load_and_authorize is one of CanCan's greatest features. It will, if applicable, load a model based on the :id parameter, and authorize, according to the HTTP Request Method.
