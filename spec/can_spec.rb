@@ -138,4 +138,14 @@ describe 'sinatra-can' do
     get '/12/' + article.id.to_s
     last_response.body.should == article.title
   end
+
+  it "should autoload when using the before do...end block" do
+    article = Article.create(:title => 'test4')
+
+    app.user { User.new('admin') }
+    app.before('/article/:id', :model => Article) { }
+    app.get('/article/:id') { @article.title }
+    get '/article/' + (article.id).to_s
+    last_response.body.should == article.title
+  end
 end
