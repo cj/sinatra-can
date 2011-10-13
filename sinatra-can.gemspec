@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "sinatra-can"
-  s.version = "0.1.5"
+  s.version = "0.1.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Silvio Henrique Ferreira"]
-  s.date = "2011-10-12"
+  s.date = "2011-10-13"
   s.description = "CanCan (Rails' authorization library) wrapper for Sinatra. Works with the latest CanCan version."
   s.email = "shferreira@me.com"
   s.extra_rdoc_files = [
@@ -33,7 +33,6 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<sinatra>, [">= 1.0.0"])
       s.add_runtime_dependency(%q<cancan>, [">= 1.6.0"])
-      s.add_runtime_dependency(%q<i18n>, [">= 0"])
       s.add_development_dependency(%q<rspec>, [">= 0"])
       s.add_development_dependency(%q<rack-test>, [">= 0"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
@@ -41,7 +40,6 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<sinatra>, [">= 1.0.0"])
       s.add_dependency(%q<cancan>, [">= 1.6.0"])
-      s.add_dependency(%q<i18n>, [">= 0"])
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<rack-test>, [">= 0"])
       s.add_dependency(%q<rcov>, [">= 0"])
@@ -50,7 +48,6 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<sinatra>, [">= 1.0.0"])
     s.add_dependency(%q<cancan>, [">= 1.6.0"])
-    s.add_dependency(%q<i18n>, [">= 0"])
     s.add_dependency(%q<rspec>, [">= 0"])
     s.add_dependency(%q<rack-test>, [">= 0"])
     s.add_dependency(%q<rcov>, [">= 0"])
