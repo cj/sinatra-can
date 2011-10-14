@@ -105,6 +105,7 @@ module Sinatra
           when 'GET': params[:id] ? :read : :list
           when 'POST': :create
           when 'PUT': :update
+          when 'PATCH': :update
           when 'DELETE': :destroy
         end
       end
