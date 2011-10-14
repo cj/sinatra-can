@@ -102,11 +102,11 @@ module Sinatra
 
       def current_operation
         case env["REQUEST_METHOD"]
-          when 'GET': params[:id] ? :read : :list
-          when 'POST': :create
-          when 'PUT': :update
-          when 'PATCH': :update
-          when 'DELETE': :destroy
+          when 'GET' then params[:id] ? :read : :list
+          when 'POST' then :create
+          when 'PUT' then :update
+          when 'PATCH' then :update
+          when 'DELETE' then :destroy
         end
       end
     end
